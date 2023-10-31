@@ -10,28 +10,28 @@ from sklearn import preprocessing
 import matplotlib.pyplot as plt
 
 
-def tanh(x):
-    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+def tanh(data):
+    return (np.exp(data) - np.exp(-data)) / (np.exp(data) + np.exp(-data))
 
 
-def dtanh(x):
-    return 1 - tanh(x) * tanh(x)
+def dtanh(data):
+    return 1 - tanh(data) * tanh(data)
 
 
-def line_active(x):
-    return x
+def line_active(data):
+    return data #1/(1+np.exp(-data))
 
 
-def dline(x):
-    return 1
+def dline(data):
+    return  1 #line_active(data)*(1-line_active(data))#1
 
 
-def lineral(x):
-    return np.array(2 * x + 5)
+def lineral(data):
+    return np.array(5 * data + 5)
 
 
-def quadratic(x):
-    return x ** 2 + 2 * x + 1
+def quadratic(data):
+    return data ** 2 + 2 * data + 1
 
 
 class Network:
@@ -65,14 +65,14 @@ class Network:
             activation = line_active(z)
             activations.append(activation)
         sigma = cost * dline(z_in[-1])
-        delta_weight[-1] = 0.1 * np.dot(sigma, activations[-2].T)
+        delta_weight[-1] = 0.001 * np.dot(sigma, activations[-2].T)
         # delta_bias[-1] = 0.1 * sigma
 
         for l in range(2, self.number_layers):
             z = z_in[-l]
             sigma_in = np.dot(self.weights[-l], sigma)
             sigma = sigma_in * dline(z)
-            delta_weight[-l] = 0.1 * np.dot(sigma, activations[-l - 1].T)
+            delta_weight[-l] = 0.001 * np.dot(sigma, activations[-l - 1].T)
         # delta_bias[-l] = 0.1 * sigm
         return delta_weight
 
@@ -95,12 +95,12 @@ if __name__ == '__main__':
     y = lineral(x)
     ytest = lineral(xtest)
 
-    net = Network([100,1, 100])
-    net.train(x, y, 2)
-    pred = net.forward(xtest)
+    net = Network([100, 10, 100])
+    net.train(x, y, 6)
+    predict = net.forward(xtest)
 
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot()
     ax.scatter(x=xtest, y=ytest, color='orange')
-    ax.scatter(x=xtest, y=pred, color='green')
+    ax.scatter(x=xtest, y=predict, color='green')
     plt.show()

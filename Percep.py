@@ -33,9 +33,6 @@ def lineral(x):
 def quadratic(x):
     return x ** 2 + 2 * x + 1
 
-def norma(data):
-    #xn = (data - data.mean()) / data.std()
-    return data.reshape(len(data),1)
 
 class Network:
     def __init__(self, sizes):
@@ -75,7 +72,7 @@ class Network:
             z = z_in[-l]
             sigma_in = np.dot(self.weights[-l], sigma)
             sigma = sigma_in * dline(z)
-            delta_weight[-l] = 0.1 * np.dot(sigma, activations[-l + 1].T)
+            delta_weight[-l] = 0.1 * np.dot(sigma, activations[-l - 1].T)
         # delta_bias[-l] = 0.1 * sigm
         return delta_weight
 
@@ -84,32 +81,26 @@ class Network:
 
         for i in range(epochs):
             np.random.shuffle(data)
-            delta_weight = self.backprop(data[:,0].reshape(100,1), data[:,1].reshape(100,1))
+            delta_weight = self.backprop(data[:, 0].reshape(len(data), 1), data[:, 1].reshape(len(data), 1))
             self.weights = list(map(sum, zip(self.weights, delta_weight)))
             # self.biases = list(map(sum, zip(self.biases, delta_bias)))
         return self.weights
 
 
-net = Network([100,1,100])
+if __name__ == '__main__':
+    x = np.array(range(-100, 100, 2))
+    x = (x - x.mean()) / x.std()
+    xtest = np.array(range(-95, 105, 2))
+    xtest = (xtest - xtest.mean()) / xtest.std()
+    y = lineral(x)
+    ytest = lineral(xtest)
 
-x = np.array(range(-100,100,2))
-xtest = np.array(range(-98,102,2))
-y = lineral(x)
-ytest = lineral(xtest)
+    net = Network([100,1, 100])
+    net.train(x, y, 2)
+    pred = net.forward(xtest)
 
-
-
-
-net.train(x,y,3)
-
-print(net.weights)
-pred = net.forward(xtest)
-print(pred)
-
-fig = plt.figure(figsize=(10, 10))
-ax = fig.add_subplot()
-
-ax.scatter(x=xtest, y=ytest, color='orange')
-ax.scatter(x=xtest, y=pred, color='green')
-
-plt.show()
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot()
+    ax.scatter(x=xtest, y=ytest, color='orange')
+    ax.scatter(x=xtest, y=pred, color='green')
+    plt.show()

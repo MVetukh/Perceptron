@@ -9,6 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def line(data):
+    return data
+
+
+def dline(data):
+    return np.ones_like(data)
+
+
 def tanh(data):
     return (np.exp(data) - np.exp(-data)) / (np.exp(data) + np.exp(-data))
 
@@ -17,16 +25,8 @@ def dtanh(data):
     return 1 - tanh(data) * tanh(data)
 
 
-def line(data):
-    return data  # 1/(1+np.exp(-data))
-
-
-def dline(data):
-    return 1  # line_active(data)*(1-line_active(data))#1
-
-
 def lineral(data):
-    return np.array(0.5 * data + 0.1)
+    return np.array(2 * data + 1)
 
 
 def quadratic(data):
@@ -37,7 +37,8 @@ class Network:
     def __init__(self, sizes):
         self.number_layers = len(sizes)
         self.sizes = np.array(sizes)
-      #  self.biases = ([np.random.randn(y, 1) for y in sizes[1:]])
+        self.learning_rate = 0.1
+        #  self.biases = ([np.random.randn(y, 1) for y in sizes[1:]])
         self.weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
         # self.p = np.sum(np.delete(self.sizes, [0,-1]))
         # self.beta = 0.7*(self.p)**(sizes[0])
@@ -51,29 +52,32 @@ class Network:
             a = line(np.dot(weight, a))
         return a
 
+    # def cost(self, predict, y):
+    #     return np.mean(np.sum((y - predict) ** 2))
+
     def backprop(self, data, value):
-       # delta_bias = [np.zeros(b.shape) for b in self.biases]
+        # delta_bias = [np.zeros(b.shape) for b in self.biases]
         activation = data
         delta_weight = [np.zeros(weight.shape) for weight in self.weights]
         activations = [data]
-        cost = (value - self.forward(data))
+        cost = value - self.forward(data)  # self.cost(self.forward(data), value)
         z_in = []
-        for weight in self.weights: #,self.biases):
+        for weight in self.weights:  # ,self.biases):
             z = np.dot(weight, activation)
             z_in.append(z)
             activation = line(z)
             activations.append(activation)
         sigma = cost * dline(z_in[-1])
-        delta_weight[-1] = 0.01 * np.dot(sigma, activations[-2].T)
-        #delta_bias[-1] = 0.1 * sigma
+        delta_weight[-1] = np.dot(sigma, activations[-2].T)
+        # delta_bias[-1] = 0.1 * sigma
 
         for layer in range(2, self.number_layers):
             z = z_in[-layer]
-            sigma_in = np.dot(self.weights[-layer],sigma)
+            sigma_in = np.dot(self.weights[-layer + 1].T, sigma)
             sigma = sigma_in * dline(z)
-            delta_weight[-layer] = 0.01 * np.dot(sigma, activations[-layer - 1].T)
-          #  delta_bias[-l] = 0.1 * sigma
-        return delta_weight  #,delta_bias
+            delta_weight[-layer] = np.dot(sigma, activations[-layer - 1].T)
+        #  delta_bias[-l] = 0.1 * sigma
+        return delta_weight  # ,delta_bias
 
     def train(self, argument, value, epochs):
         data = np.vstack((argument, value)).T
@@ -81,21 +85,23 @@ class Network:
         for i in range(epochs):
             np.random.shuffle(data)
             delta_weight = self.backprop(data[:, 0].reshape(len(data), 1), data[:, 1].reshape(len(data), 1))
-            self.weights = list(map(sum, zip(self.weights, delta_weight)))
-           # self.biases = list(map(sum, zip(self.biases, delta_bias)))
+            self.weights = [weight - self.learning_rate * delta for weight, delta in
+                            zip(self.weights, delta_weight)]  # list(map(sum, zip(self.weights, delta_weight)))
+        # self.biases = list(map(sum, zip(self.biases, delta_bias)))
         return self.weights
 
 
 if __name__ == '__main__':
     x = np.array(range(-100, 100, 2))
-    x = (x - x.mean()) / x.std()
-    xtest = np.array(range(-95, 105, 2))
-    xtest = (xtest - xtest.max()) / xtest.max()
+    x = (x.max() - x) / (x.max() - x.min())
+    xtest = np.array(range(-98, 102, 2))
+    xtest = (xtest.max() - xtest) / (xtest.max() - xtest.min())
     y = lineral(x)
     ytest = lineral(xtest)
 
-    net = Network([100, 2, 100])
-    net.train(x, y, 1)
+    net = Network([100, 10,15, 100])
+    print(net.weights[1].shape)
+    net.train(x, y, 100)
     predict = net.forward(xtest)
 
     fig = plt.figure(figsize=(10, 10))

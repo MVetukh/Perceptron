@@ -126,7 +126,7 @@ class MLP:
         predict = self.z3
         return predict
 
-    def backward(self, argument, value, predict, learning_rate):
+    def backpropogation(self, argument, value, predict, learning_rate):
         delta3 = (predict - value)
         delta_Weight_2 = np.dot(self.a2.T, delta3)
 
@@ -139,7 +139,7 @@ class MLP:
     def train(self, argument, value, epochs=1000, learning_rate=0.1):
         for epoch in range(epochs):
             predict = self.forward(argument)
-            self.backward(argument, value, predict, learning_rate)
+            self.backpropogation(argument, value, predict, learning_rate)
 
 
 if __name__ == '__main__':

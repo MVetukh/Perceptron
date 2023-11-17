@@ -18,14 +18,18 @@ def dline(data):
 
 
 #
-def sigmoid(data):
-    return 1 / (1 + np.exp(-data))
+#def sigmoid(data):
+ #   return 1 / (1 + np.exp(-data))
 
+#def dsigmoid(data):
+ #   return sigmoid(data) * (1 - sigmoid(data))
 
-#
-#
-def dsigmoid(data):
-    return sigmoid(data) * (1 - sigmoid(data))
+def ReLu(x):
+    return np.maximum(0.0, x)
+
+def der_ReLu(x):
+    r = np.where(x > 0, 1, 0)
+    return r
 
 
 def lineral(data):
@@ -121,7 +125,7 @@ class MLP:
 
     def forward(self, argument):
         self.z2 = np.dot(argument, self.Weight_1)
-        self.a2 = sigmoid(self.z2)
+        self.a2 = ReLu(self.z2)
         self.z3 = np.dot(self.a2, self.Weight_2)
         predict = self.z3
         return predict
@@ -130,13 +134,13 @@ class MLP:
         delta3 = (predict - value)
         delta_Weight_2 = np.dot(self.a2.T, delta3)
 
-        delta2 = np.dot(delta3, self.Weight_2.T) * dsigmoid(self.z2)
+        delta2 = np.dot(delta3, self.Weight_2.T) * der_ReLu(self.z2)
         delta_Weight_1 = np.dot(argument.T, delta2)
 
         self.Weight_2 -= learning_rate * delta_Weight_2
         self.Weight_1 -= learning_rate * delta_Weight_1
 
-    def train(self, argument, value, epochs=1000, learning_rate=0.1):
+    def train(self, argument, value, epochs=100, learning_rate=0.01):
         for epoch in range(epochs):
             predict = self.forward(argument)
             self.backpropogation(argument, value, predict, learning_rate)

@@ -1,0 +1,60 @@
+
+# class Network:
+#     def __init__(self, sizes):
+#         self.number_layers = len(sizes)
+#         self.sizes = np.array(sizes)
+#         self.learning_rate = 0.005
+#        # self.biases = ([np.random.randn(y, 1) for y in sizes[1:]])
+#         self.weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
+#         # self.p = np.sum(np.delete(self.sizes, [0,-1]))
+#         # self.beta = 0.7*(self.p)**(sizes[0])
+#         # self.sum = []
+#         # for j in range(len(self.weights)):
+#         #   self.sumj = np.sqrt(sum(i*i for i in self.weights[j]))
+#         #   self.weights[j] = (self.beta*self.weights[j])/self.sumj
+#
+#     def forward(self, a):
+#         for weight in self.weights:
+#             a = line(np.dot(weight, a))
+#         return a
+#
+#     # def cost(self, predict, y):
+#     #     return np.mean(np.sum((y - predict) ** 2))
+#
+#     def backprop(self, data, value):
+#         #delta_bias = [np.zeros(b.shape) for b in self.biases]
+#         activation = data
+#         delta_weight = [np.zeros(weight.shape) for weight in self.weights]
+#         activations = [activation]
+#         cost = value - self.forward(activation)  # self.cost(self.forward(data), value)
+#         z_in = []
+#         for weight in self.weights:  # ,self.biases):
+#             z = np.dot(weight, activation)
+#             z_in.append(z)
+#             activation = line(z)
+#             activations.append(activation)
+#         sigma = cost * dline(z_in[-1])
+#         delta_weight[-1] = np.dot(sigma, activations[-2].T)
+#         #delta_bias[-1] = sigma
+#
+#         for layer in range(2, self.number_layers):
+#             z = z_in[-layer]
+#             sigma_in = np.dot(self.weights[-layer + 1].T, sigma)
+#             sigma = sigma_in * dline(z)
+#             delta_weight[-layer] = np.dot(sigma, activations[-layer - 1].T)
+#          #   delta_bias[-layer] = sigma
+#         return delta_weight #delta_bias
+#
+#     def train(self, argument, value, epochs):
+#         data = np.c_[argument, value]
+#
+#         for i in range(epochs):
+#             np.random.shuffle(data)
+#             for j in range(len(data)):
+#                 delta_weight = self.backprop(np.array((data[j][0],data[j][1])).reshape(2,1),data[j][2].reshape(1,1))#[self.backprop(x,y) for x, y in zip(data[:, 0].reshape(len(data), 1), data[:, 1].reshape(len(data), 1))]
+#                 self.weights = [weight - self.learning_rate * delta for weight, delta in
+#                             zip(self.weights, delta_weight)]  # list(map(sum, zip(self.weights, delta_weight)))
+#                # self.biases =[bias - self.learning_rate * delta for bias, delta in
+#             #            zip(self.biases, delta_bias)]
+#         return self.weights#, self.biases
+#

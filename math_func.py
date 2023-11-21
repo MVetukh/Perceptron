@@ -31,4 +31,4 @@ def lineral(data):
 
 
 def quadratic(data):
-    return data ** 2 + 2 * data + 1
+    return 0.01*data ** 2 +0.01* 2 * data + 0.01

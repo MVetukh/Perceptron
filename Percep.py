@@ -10,9 +10,10 @@ import matplotlib.pyplot as plt
 import math_func
 import line_approximation
 import quad_approximation
-
+import itertools
 
 if __name__ == '__main__':
+    np.random.seed(1)
     x_train = np.linspace(0, 1, 100).reshape(-1, 1)
     y_train_line = math_func.lineral(x_train)
     y_train_quadratic = math_func.quadratic(x_train)
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     Line_Aproximate.train(x_train, y_train_line)
     y_predict_line = Line_Aproximate.predict(x_test)
 
-    Quad_Aproximate = quad_approximation.Quadratic_Approximation()
+    Quad_Aproximate = quad_approximation.Quadratic_Approximation(1,1,1)
     Quad_Aproximate.train(x_train, y_train_quadratic)
     y_predict_quadratic = Quad_Aproximate.forward(x_test)
 
@@ -35,7 +36,7 @@ if __name__ == '__main__':
     plt.scatter(x=x_test, y=y_predict_line, color='green')
 
     plt.figure(figsize=(10, 10))
-    plt.scatter(x=x_test, y=y_test_quadratic, color='orange')
+    #plt.scatter(x=x_test, y=y_test_quadratic, color='orange')
     plt.scatter(x=x_test, y=y_predict_quadratic, color='green')
 
     plt.show()

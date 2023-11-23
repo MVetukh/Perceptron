@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import math_func
 import line_approximation
 import quad_approximation
-import itertools
+
 
 if __name__ == '__main__':
     np.random.seed(1)
@@ -26,9 +26,19 @@ if __name__ == '__main__':
     Line_Aproximate.train(x_train, y_train_line)
     y_predict_line = Line_Aproximate.predict(x_test)
 
-    Quad_Aproximate = quad_approximation.Quadratic_Approximation(1,1,1)
-    Quad_Aproximate.train(x_train, y_train_quadratic)
-    y_predict_quadratic = Quad_Aproximate.forward(x_test)
+    Quad_Aproximate = quad_approximation.Quadratic_Approximation()
+    lost = []
+    for i in range(2500):
+        loss = Quad_Aproximate.backpropogation(x_train, y_train_quadratic)
+        lost.append(loss)
+
+    plt.plot(lost)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.show()
+
+    y_predict_quadratic = Quad_Aproximate.predict(x_test)
+
 
 
     plt.figure(figsize=(10, 10))

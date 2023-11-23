@@ -26,9 +26,17 @@ def der_ReLu(x):
     return r
 
 
+def tanh(x):
+    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+
+
+def dtanh(x):
+    return 1 - tanh(x) * tanh(x)
+
+
 def lineral(data):
     return 2 * data + 2
 
 
 def quadratic(data):
-    return 0.01*data ** 2 +0.01* 2 * data + 0.01
+    return  data ** 2 + 2*data + 1

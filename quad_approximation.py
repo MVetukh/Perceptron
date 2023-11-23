@@ -3,26 +3,34 @@ import math_func
 
 
 class Quadratic_Approximation:
-    def __init__(self, input_layer, hidden_layer, output_layer):
+    def __init__(self):
 
-        self.weight1 = np.random.randn(input_layer, hidden_layer)
-        self.bias1 = np.zeros((1, hidden_layer))
-        self.weight2 = np.random.randn(hidden_layer, output_layer)
-        self.bias2 = np.zeros((1, output_layer))
+        self.weight1 = np.random.randn(1, 10)
+        self.bias1 = np.zeros((1, 10))
+        self.weight2 = np.random.randn(10, 1)
+        self.bias2 = np.zeros((1, 1))
 
-    def forward(self, argument):
-        self.z2 = np.dot(argument, self.weight1)+self.bias1
-        self.a2 = math_func.sigmoid(self.z2)
-        self.z3 = np.dot(self.a2, self.weight2)+self.bias2
-        predict = math_func.sigmoid(self.z3)
-        return predict
+    # def forward(self, argument):
+    #     self.z2 = np.dot(argument, self.weight1)+self.bias1
+    #     self.a2 = math_func.tanh(self.z2)
+    #     self.z3 = np.dot(self.a2, self.weight2)+self.bias2
+    #     predict = math_func.tanh(self.z3)
+    #     return predict
 
-    def backpropogation(self, argument, value, learning_rate):
+    def predict(self, argument) -> np.ndarray:
         F = np.dot(argument, self.weight1)  # (bs, hidden_dim)
         E = F + self.bias1  # (bs, hidden_dim)
         D = math_func.sigmoid(E)  # (bs, hidden_dim)
         C = np.dot(D, self.weight2)  # (bs, out_dim)
         B = C + self.bias2  # (bs, out_dim)
+        return (B)
+
+    def backpropogation(self, argument, value, learning_rate= 0.001):
+        F = np.dot(argument, self.weight1)  # (bs, hidden_dim)
+        E = F + self.bias1  # (bs, hidden_dim)
+        D = math_func.dsigmoid(E)  # (bs, hidden_dim)
+        C = np.dot(D, self.weight2)  # (bs, out_dim)
+        B = (C + self.bias2)  # (bs, out_dim)
         A = value - B  # (bs, out_dim)
         L = np.power(A, 2).mean()
 
@@ -60,7 +68,8 @@ class Quadratic_Approximation:
         # self.layer_1 -= learning_rate * delta_weight_1
         return L
 
-    def train(self, argument, value, epochs=100, learning_rate=0.1):
-        for epoch in range(epochs):
-            #predict = self.forward(argument)
-            self.backpropogation(argument, value, learning_rate)
+    # def train(self, argument, value, epochs=100, learning_rate=0.01):
+    #     data = np.c_[argument, value]
+    #     for epoch in range(epochs):
+    #         np.random.shuffle(data)
+    #         self.backpropogation(argument[0], value[1], learning_rate)

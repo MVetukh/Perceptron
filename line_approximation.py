@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class LinearApproximation:
     def __init__(self):
         self.weights = np.random.randn()
@@ -15,4 +16,3 @@ class LinearApproximation:
 
     def predict(self, argument):
         return self.weights * argument + self.bias
-

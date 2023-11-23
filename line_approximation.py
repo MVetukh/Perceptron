@@ -1,5 +1,5 @@
 import numpy as np
-
+import math_func
 
 class LinearApproximation:
     def __init__(self):
@@ -15,4 +15,4 @@ class LinearApproximation:
             self.bias -= learning_rate * delta_bias
 
     def predict(self, argument):
-        return self.weights * argument + self.bias
+        return math_func.line(self.weights * argument + self.bias)

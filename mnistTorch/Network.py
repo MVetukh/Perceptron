@@ -4,23 +4,18 @@ import torch.nn
 class Network(torch.nn.Module):
     def __init__(self):
         super(Network, self).__init__()
-        self.layer1 = torch.nn.Sequential(
-            torch.nn.Conv2d(1, 16, kernel_size=5, stride=1, padding=2),
-            torch.nn.BatchNorm2d(16),
-            torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2))
-        self.layer2 = torch.nn.Sequential(
-            torch.nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            torch.nn.BatchNorm2d(32),
-            torch.nn.ReLU(),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = torch.nn.Linear(7 * 7 * 32, 10)
-
+        self.fc1 = torch.nn.Linear(784, 128)
+        self.relu1 = torch.nn.ReLU()
+        self.fc2 = torch.nn.Linear(128, 64)
+        self.relu2 = torch.nn.ReLU()
+        self.fc3 = torch.nn.Linear(64, 10)
     def forward(self, input):
-        out = self.layer1(input)
-        output = self.layer2(out)
-        output = output.reshape(out.size(0), -1)
-        output = self.fc(output)
+        input = input.view(-1, 784)
+        layer1 = self.fc1(input)
+        layer1 = self.relu1(layer1)
+        layer2 = self.fc2(layer1)
+        output = self.relu2(layer2)
+        output = self.fc3(output)
         return output
 
 

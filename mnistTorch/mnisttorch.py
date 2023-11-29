@@ -7,8 +7,7 @@ import torchvision
 from torchvision.datasets import MNIST
 import train_test
 
-
-if __name__ == '__main__':
+def main():
     batch_size = 64
     train_dataset = torchvision.datasets.MNIST(root='D:\PyProjects\Peceptron\dataset', train=True, transform=torchvision.transforms.ToTensor(),
                                                download=True)
@@ -19,4 +18,8 @@ if __name__ == '__main__':
 
     train_test.train(train_loader)
     train_test.test(test_loader)
+
+
+if __name__ == '__main__':
+    main()
 

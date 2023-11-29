@@ -9,7 +9,7 @@ import train_test
 
 
 if __name__ == '__main__':
-    batch_size = 100
+    batch_size = 64
     train_dataset = torchvision.datasets.MNIST(root='D:\PyProjects\Peceptron\dataset', train=True, transform=torchvision.transforms.ToTensor(),
                                                download=True)
     test_dataset = torchvision.datasets.MNIST(root='D:\PyProjects\Peceptron\dataset', train=False, transform=torchvision.transforms.ToTensor())

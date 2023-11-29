@@ -8,7 +8,7 @@ def train(train_loader):
 
     loss_func = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
-    epochs = 2
+    epochs = 10
     losses = []
 
     for epoch in range(epochs):
@@ -19,7 +19,7 @@ def train(train_loader):
 
             optimizer.zero_grad()
             loss.backward()
-            losses.append(loss.item)
+            losses.append(loss.item())
             optimizer.step()
 
     plt.plot(losses)

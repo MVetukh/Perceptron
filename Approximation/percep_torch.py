@@ -19,7 +19,7 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(10, 1)
 
     def forward(self, x):
-        x = torch.relu(self.fc1(x))
+        x = torch.sigmoid(self.fc1(x))
         x = self.fc2(x)
         return x
 

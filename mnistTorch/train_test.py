@@ -2,16 +2,18 @@ import Network
 import torch
 import mnisttorch
 import matplotlib.pyplot as plt
+import default_config
 
 model = Network.Network()
+
 def train(train_loader):
 
     loss_func = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
-    epochs = 10
+    optimizer = torch.optim.SGD(model.parameters(), lr=default_config.params_grid['learning_rate'])
+
     losses = []
 
-    for epoch in range(epochs):
+    for epoch in range(default_config.params_grid['epochs']):
         for i, (images, labels) in enumerate(train_loader):
 
             outputs = model(images)

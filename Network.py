@@ -1,5 +1,6 @@
 import torch
 import torch.nn
+import csv
 
 class Network(torch.nn.Module):
     def __init__(self):
@@ -17,6 +18,16 @@ class Network(torch.nn.Module):
         output = self.relu2(layer2)
         output = self.fc3(output)
         return output
+
+    def save_results(self, path, test_loader):
+        with open(path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Label', 'Predicted'])
+            with torch.no_grad():
+                for data, targets in test_loader:
+                    outputs = self(data)
+                    _, predicted = torch.max(outputs.data, 1)
+                    writer.writerows(zip(targets.tolist(), predicted.tolist()))
 
 
 

@@ -17,11 +17,11 @@ def dsigmoid(data):
     return sigmoid(data) * (1 - sigmoid(data))
 
 
-def ReLu(x):
+def relu(x):
     return np.maximum(0.0, x)
 
 
-def der_ReLu(x):
+def der_relu(x):
     r = np.where(x > 0, 1, 0)
     return r
 

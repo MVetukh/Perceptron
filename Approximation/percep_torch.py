@@ -5,11 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math_func
 
-data = np.arange(-10, 10, 1)
-target = math_func.quadratic(data)
 
-data = torch.tensor(data, dtype=torch.float).view(-1, 1)
-target = torch.tensor(target, dtype=torch.float).view(-1, 1)
 
 
 class Net(nn.Module):
@@ -26,6 +22,12 @@ class Net(nn.Module):
 
 if __name__ == '__main__':
     net = Net()
+
+    data = np.arange(-10, 10, 1)
+    target = math_func.quadratic(data)
+
+    data = torch.tensor(data, dtype=torch.float).view(-1, 1)
+    target = torch.tensor(target, dtype=torch.float).view(-1, 1)
 
     criterion = nn.MSELoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)

@@ -14,14 +14,14 @@ def main():
     y_test_line = math_func.lineral(x_test)
     y_test_quadratic = math_func.quadratic(x_test)
 
-    Line_Aproximate = LinearApproximation()
-    Line_Aproximate.train(x_train, y_train_line)
-    y_predict_line = Line_Aproximate.predict(x_test)
+    line_aproximate = LinearApproximation()
+    line_aproximate.train(x_train, y_train_line)
+    y_predict_line = line_aproximate.predict(x_test)
 
-    Quad_Aproximate = Quadratic_Approximation()
+    quad_aproximate = Quadratic_Approximation()
     lost = []
     for i in range(2500):
-        loss = Quad_Aproximate.backpropogation(x_train, y_train_quadratic)
+        loss = quad_aproximate.backpropogation(x_train, y_train_quadratic)
         lost.append(loss)
 
     plt.plot(lost)
@@ -29,7 +29,7 @@ def main():
     plt.ylabel('Loss')
     plt.show()
 
-    y_predict_quadratic = Quad_Aproximate.predict(x_test)
+    y_predict_quadratic = quad_aproximate.predict(x_test)
 
     plt.figure(figsize=(10, 10))
     plt.scatter(x=x_test, y=y_test_line, color='orange')

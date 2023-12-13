@@ -1,15 +1,15 @@
+from torch import nn
 import torch
-import torch.nn
 import csv
 
-class Network(torch.nn.Module):
+class Network(nn.Module):
     def __init__(self):
         super(Network, self).__init__()
-        self.fc1 = torch.nn.Linear(784, 128)
-        self.relu1 = torch.nn.ReLU()
-        self.fc2 = torch.nn.Linear(128, 64)
-        self.relu2 = torch.nn.ReLU()
-        self.fc3 = torch.nn.Linear(64, 10)
+        self.fc1 = nn.Linear(784, 128)
+        self.relu1 = nn.ReLU()
+        self.fc2 = nn.Linear(128, 64)
+        self.relu2 = nn.ReLU()
+        self.fc3 = nn.Linear(64, 10)
     def forward(self, input):
         input = input.view(-1, 784)
         layer1 = self.fc1(input)

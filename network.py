@@ -2,6 +2,7 @@ from torch import nn
 import torch
 import csv
 
+
 class Network(nn.Module):
     def __init__(self):
         super(Network, self).__init__()
@@ -10,6 +11,7 @@ class Network(nn.Module):
         self.fc2 = nn.Linear(128, 64)
         self.relu2 = nn.ReLU()
         self.fc3 = nn.Linear(64, 10)
+
     def forward(self, input):
         input = input.view(-1, 784)
         layer1 = self.fc1(input)
@@ -28,7 +30,3 @@ class Network(nn.Module):
                     outputs = self(data)
                     _, predicted = torch.max(outputs.data, 1)
                     writer.writerows(zip(targets.tolist(), predicted.tolist()))
-
-
-
-

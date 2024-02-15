@@ -2,4 +2,4 @@ __pycache__/
 /.idea
 venv/
 checkpoint.pth
-mnist_png/
+

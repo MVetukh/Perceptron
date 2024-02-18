@@ -12,12 +12,12 @@ import network
 import utiles
 
 
-def validate(model, val_loader, loss_func):
+def validate(model, val_loader, loss_func) -> (float, float):
     model.eval()  # Режим оценки (evaluation mode)
     val_loss: int = 0
     correct: int = 0
     with torch.no_grad():  # Отключение градиентов для ускорения и снижения использования памяти
-        for images, labels in tqdm(val_loader):
+        for images, labels in tqdm(val_loader, desc="Валидация"):
             outputs = model(images)
             val_loss += loss_func(outputs, labels).item()
             _, predicted = torch.max(outputs, 1)
@@ -28,7 +28,7 @@ def validate(model, val_loader, loss_func):
     return val_loss, val_accuracy
 
 
-def train(train_loader, val_loader):
+def train(train_loader, val_loader) -> None:
     model = network.Network()
     hyper_parameters = utiles.read_param()
 
@@ -40,7 +40,7 @@ def train(train_loader, val_loader):
 
     losses: list = []
     for epoch in range(epochs):
-        for i, (images, labels) in enumerate(tqdm(train_loader)):
+        for i, (images, labels) in enumerate(tqdm(train_loader, desc="Обучение")):
             outputs = model(images)
             loss = loss_func(outputs, labels)
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     hyper_parameters = utiles.read_param()
     batch_size = hyper_parameters.batch_size
 
-    root_dir = Path('D:/datasets/mnist_png/Training').resolve()
+    root_dir = Path('D:\datasets\mnist_png\Training').resolve()
 
 
     transforms: Compose = Compose([

@@ -8,13 +8,13 @@ from pathlib import Path
 from utiles import read_param
 
 
-def prepare_dataset(root_dir):
-    data = []
-    root_path = Path(root_dir)
+def prepare_dataset(root_dir) -> list:
+    data: list = []
+    root_path: Path = Path(root_dir)
     # Проходимся по всем поддиректориям и собираем информацию о путях к изображениям и их классах
     for class_folder in root_path.iterdir():
         if class_folder.is_dir():
-            class_id = class_folder.name
+            class_id: str = class_folder.name
             images_paths = list(class_folder.glob('*.png'))
             data.extend([(img_path, int(class_id)) for img_path in images_paths])
 
@@ -26,7 +26,7 @@ class CustomDataset(Dataset):
         self.transform = transform
         self.data_info = prepare_dataset(root_dir)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data_info)
 
     def __getitem__(self, idx):
@@ -38,7 +38,7 @@ class CustomDataset(Dataset):
         return image, class_id
 
 
-def mnist_dataloader():
+def mnist_dataloader() -> (DataLoader[Any], DataLoader[Any]):
     train_dataset = MNIST(root='D:\PyProjects\Peceptron\Perceptron\dataset', train=True,
                           transform=ToTensor(),
                           download=True)
